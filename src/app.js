@@ -1,23 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client"
+import Header from "./components/Header";
+import Body from "./components/Body";
 
-const heading=<h1 id="heading">hello world🚀</h1>;
-const Footer=()=>{
+
+const AppLayout=()=>{
   return(
-    <div className="footer">
-      {heading}
-    </div>
-  )
-}
-const Body=()=>{
-  return(
-    <div className="body">
-      {<h1>{1000+1}</h1>}
-      {Footer()}
+    <div className="app">
+      <Header/>
+      <Body/>
+
     </div>
   )
 }
 const root=ReactDOM.createRoot(document.getElementById("root"));
-root.render(<Body/>)
+root.render(<AppLayout/>)
 
 
