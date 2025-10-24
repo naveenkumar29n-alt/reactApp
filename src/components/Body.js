@@ -5,6 +5,8 @@ import Shimmer from "./Shimmer";
 
 const Body=()=>{
   const[listOfRestaurants,setListOfRestaurants]=useState([]);
+  const[filteredRestaurants,setFilteredRestaurants]=useState([]);
+  const[searchText,setSearchText]=useState("")
   useEffect(()=>{
     fetchData()
   },[])
@@ -12,19 +14,25 @@ const Body=()=>{
     const data=await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=11.0102&lng=76.9701&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING");
     const json=await data.json();
     setListOfRestaurants(json?.data.cards[4].card.card.gridElements.infoWithStyle.restaurants)
+    setFilteredRestaurants(json?.data.cards[4].card.card.gridElements.infoWithStyle.restaurants)
   }
   return (listOfRestaurants.length===0)?<Shimmer/>:(
     <div className="body">
       <div className="filter">
+        <input type="text" value={searchText} onChange={(e)=>setSearchText(e.target.value)}></input>
+        <button className="search-btn" onClick={()=>{
+          const filteredRestaurants=listOfRestaurants.filter((res)=>res.info.name.toLowerCase().includes(searchText.toLowerCase()));
+        setFilteredRestaurants(filteredRestaurants)
+        }}>search</button>
         <button className="filter-btn" onClick={()=>{
           const filteredRestaurants=listOfRestaurants.filter((res)=>res.info.avgRating>4.3);
-          setListOfRestaurants(filteredRestaurants)
+          setFilteredRestaurants(filteredRestaurants)
 
         }}>Top Rated Restaurants</button>
       </div>
       <div className="res-container">
      {
-      listOfRestaurants.map((restaurant)=><RestaurantCard    key={restaurant.info.id} resData={restaurant}/>)
+     filteredRestaurants.map((restaurant)=><RestaurantCard    key={restaurant.info.id} resData={restaurant}/>)
      }
          
 
